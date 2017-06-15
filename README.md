@@ -11,5 +11,4 @@ The procedure of the algorithm is to:
 Note that we only incorporate 5 classes in the training (specifically sketch labels: car, fish, cat, coffee cup, cookie). There are couple hundred more class labels one can expand to, but for the sake of simplicity, we only classify for these 5 objects.
 
 author: Anson Wong 
-
 github: ankonzoid
