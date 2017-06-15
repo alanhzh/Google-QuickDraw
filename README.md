@@ -1,4 +1,4 @@
-# GoogleSketch 
+# GoogleSketch
 
 Given a set of task images of a noisy Google SketchRNN object embedded in a 112 x 112 pixel black background, we classify the object drawn in the noisy sketch. An example classification of 5 of the described task images being classified by our trained model 
 
@@ -15,5 +15,10 @@ The steps taken explicitly by our model are:
 ![My image](https://github.com/ankonzoid/GoogleSketch/blob/master/results/CNN_training.png)
 
 Note that we only incorporate 5 classes in the training (specifically sketch labels: car, fish, cat, coffee cup, cookie). There are couple hundred more class labels one can expand to, but for the sake of simplicity, we only classify for these 5 objects.
+
+Usage:
+
+...
+
 
 Author: Anson Wong (ankonzoid)
