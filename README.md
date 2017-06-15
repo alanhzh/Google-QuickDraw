@@ -2,7 +2,7 @@
 
 Given a set of task images of a noisy Google SketchRNN object embedded in a 112 x 112 pixel black background, we classify the object drawn in the noisy sketch. An example of 5 task images being classified by our trained model 
 
-![My image](ankonzoid.github.com/GoogleSketch/results/MAIN_RESULT.png)
+![My image](GoogleSketch/results/MAIN_RESULT.png)
 
 The steps taken by our model are:
 
