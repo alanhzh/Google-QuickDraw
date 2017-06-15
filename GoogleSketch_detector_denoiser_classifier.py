@@ -1,6 +1,6 @@
 """
 
- GoogleSketchRNN_OPENCV_CAE_CNN.py (Anson Wong; anson.ao@gmail.com)
+ GoogleSketchRNN_OPENCV_CAE_CNN.py (Anson Wong)
  
  Given a set of task images that are large 112 x 112 images with a noisy object image in it,
  we use Google SketchRNN data set of labeled clean animals/objects as training data to classify
