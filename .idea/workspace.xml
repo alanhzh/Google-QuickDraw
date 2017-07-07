@@ -1,33 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="32183ab5-b9d0-4b78-a981-8ca13664ab56" name="Default" comment="update">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/answer/CAE_training.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/answer/CNN_training.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/answer/MAIN_RESULT.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_10.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_11.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_12.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_13.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_14.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_15.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_16.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_17.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_18.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_19.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_20.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_4.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_5.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_6.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_7.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_8.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/query/query_image_9.jpg" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="32183ab5-b9d0-4b78-a981-8ca13664ab56" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/QuickDraw_noisy_classifier.py" afterPath="$PROJECT_DIR$/QuickDraw_noisy_classifier.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -38,20 +14,7 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="QuickDraw_noisy_classifier.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/QuickDraw_noisy_classifier.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-829">
-              <caret line="243" column="8" lean-forward="false" selection-start-line="243" selection-start-column="8" selection-end-line="243" selection-end-column="8" />
-              <folding>
-                <element signature="e#633#669#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -69,6 +32,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/QuickDraw_noisy_classifier.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -117,6 +81,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Google-QuickDraw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Google-QuickDraw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="answer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -259,17 +237,30 @@
       <option name="project" value="LOCAL" />
       <updated>1499421957295</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="update">
+      <created>1499425016672</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1499425016672</updated>
+    </task>
+    <task id="LOCAL-00003" summary="update">
+      <created>1499425645796</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1499425645796</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="45" y="23" width="1849" height="992" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.255119" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.257886" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -298,13 +289,38 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/QuickDraw_noisy_classifier.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-829">
-          <caret line="243" column="8" lean-forward="false" selection-start-line="243" selection-start-column="8" selection-end-line="243" selection-end-column="8" />
-          <folding>
-            <element signature="e#633#669#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="179">
+          <caret line="292" column="37" lean-forward="true" selection-start-line="292" selection-start-column="37" selection-end-line="292" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="361">
+            <caret line="19" column="0" lean-forward="true" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
