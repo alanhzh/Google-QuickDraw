@@ -15,7 +15,7 @@ Given a set of query images of a noisy Google QuickDraw object, we classify the 
 ### 3) Classify the denoised query images using a convolutional neural networks (convNN)
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="200%" align="center">
 
-Note that we only incorporate 5 classes in the training (specifically sketch labels: car, fish, cat, coffee cup, cookie). There are couple hundred more class labels one can expand to, but for the sake of simplicity, we only classify for these 5 objects.
+Note that we only incorporate 5 classes in the training (specifically sketch labels: pineapple, cat, fish, cup, jacket). There are a couple hundred more class labels one can expand to in the QuickDraw data set, but for the sake of computational simplicity, we only classify for these selected 5 objects.
 
 
 ## Usage:
