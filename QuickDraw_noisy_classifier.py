@@ -11,15 +11,13 @@
 
  The main steps:
   1) Create/collect query images for classification, and clean images for training
-  2) We then train a convolutional autoencoder to learn how to denoise the image   
-  3) We then train a convolutional neural network to classify the denoised image
+  2) Train a convolutional autoencoder to learn how to denoise the image   
+  3) Train a convolutional neural network to classify the denoised image
   
 """
-import sys, os, random, argparse, scipy.misc
+import os, scipy.misc, pylab, random
 import numpy as np
 import matplotlib.pyplot as plt
-from skimage import exposure
-from PIL import Image
 
 import keras
 from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D  # CAE
@@ -27,7 +25,6 @@ from keras.models import Model  # CAE
 from keras.callbacks import TensorBoard  # CAE
 from keras.models import Sequential  # CNN
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D  # CNN
-from keras import backend as K  # CNN
 from keras.models import load_model  # save keras model
 
 def main():
@@ -51,8 +48,8 @@ def main():
     n_epochs_CNN = 5  # number of epochs for CNN training (5)
     batch_size_CNN = 512  # batch size of CNN training
 
-    n_query_category = 4  # number of query images to take from each category
-
+    n_query_category = 2  # number of query images to take from each category
+    seed = 101
 
     # =======================================================
     #
@@ -76,7 +73,7 @@ def main():
         data = np.load(category_filenames[i_category])
         n_total = len(data)
         print("Reading data for category index {0}/{1}: '{2}' (shape = {3})".format(
-            i_category, len(categories), category, data.shape))
+            i_category+1, len(categories), category, data.shape))
         for j in range(n_query_category):
             img = np.array(data[j]).reshape((ypixels, xpixels))
             x_query_create.append(img)
@@ -112,21 +109,21 @@ def main():
     n_categories = len(categories)  # number of classes
     x_train = []; y_train = []  # holds training images/labels
     x_test = []; y_test = []  # holds test images/labels
-    for index_category, category in enumerate(categories):
+    for i_category, category in enumerate(categories):
         
-        data = np.load(category_filenames[index_category])
+        data = np.load(category_filenames[i_category])
         data = data[n_query_category:]  # omit the query images extracted earlier
 
         n_data = len(data)
         print("[%d/%d] Reading category index %d: '%s' (%d images: take %d training, take %d test)" %
-              (index_category, len(categories), index_category, category, n_data, n_take_train, n_take_test))
+              (i_category+1, len(categories), i_category, category, n_data, n_take_train, n_take_test))
         
         for j, data_j in enumerate(data):
             img = np.array(data_j).reshape((ypixels, xpixels))
             if j < n_take_train:
-                x_train.append(img); y_train.append(index_category)  # append to training set
+                x_train.append(img); y_train.append(i_category)  # append to training set
             elif j - n_take_train < n_take_test:
-                x_test.append(img); y_test.append(index_category)  # append to test set
+                x_test.append(img); y_test.append(i_category)  # append to test set
             else:
                 break
 
@@ -152,7 +149,6 @@ def main():
     #
     # Read query images
     #
-    x_query_raw = []
     x_query_extracted = []
     for i in range(n_query_category*len(categories)):
 
@@ -160,21 +156,11 @@ def main():
         query_image_filename = "query/query_image_%d.jpg" % (i+1)
         query_img_i = read_img(query_image_filename, gray_scale=True)
         x_query_extracted.append(query_img_i)
-        if 0:
-            plot_img(query_img_i, "Extracted task image", 1)
 
     x_query = np.array(x_query_extracted.copy())  # convert extracted version to numpy array (should already by numpy)
-    x_query_raw = np.array(x_query_raw)
     x_query_original = x_query.copy()  # copy original just in case
 
     x_query = convert_img2norm(x_query, ypixels, xpixels)  # normalize and reshape
-
-    if 0:
-        # Print an example to familiarize with extracting from the raw task image
-        fignum = 1
-        fignum = plot_img(x_query_raw[0], "Query Image Raw", fignum)
-        fignum = plot_img(x_query_extracted[0], "Query Image Extracted", fignum)
-        sys.exit()
 
     #
     # Convert class vectors to binary class matrices (categorical encoding)
@@ -186,13 +172,16 @@ def main():
     # Visualize the noisy data set for debugging
     # For debugging purposes, we check 10 noisy test images
     if check_noisydata:
-        plot_unlabeled_images_random(x_test_noisy, 10, "Noisy test images", ypixels, xpixels)
+        plot_unlabeled_images_random(x_test_noisy, 10, "Noisy test images",
+                                     ypixels, xpixels, seed, "answer/noisy_test_imgs.png")
     # For debugging purposes, we check 10 original training images
     if check_original_training:
-        plot_labeled_images_random(x_train_original, y_train_original, categories, 10, "Original training images", ypixels, xpixels)
+        plot_labeled_images_random(x_train_original, y_train_original, categories, 10, "Original training images",
+                                   ypixels, xpixels, seed, "answer/original_train_imgs.png")
     # For debugging purposes, we check 10 original test images
     if check_original_test:
-        plot_labeled_images_random(x_test_original, y_test_original, categories, 10, "Original test images", ypixels, xpixels)
+        plot_labeled_images_random(x_test_original, y_test_original, categories, 10, "Original test images",
+                                   ypixels, xpixels, seed, "answer/original_test_imgs.png")
 
 
     # =================================================
@@ -214,9 +203,6 @@ def main():
 
     else:
 
-        n_epochs = n_epochs_CAE
-        batch_size = batch_size_CAE
-
         # Build convolutional auto encoder layers
         input_img = Input(shape=input_shape)
         encoded = Conv2D(32, (3, 3), activation='relu', padding='same')(input_img)
@@ -235,13 +221,14 @@ def main():
         #  adadelta optimization -> fast convergence properties in general NN
         #  binary cross entropy loss -> penalize when estimated class prob hits wrong target classes
         autoencoder = Model(input_img, decoded)
-        autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+        autoencoder.compile(optimizer='adadelta',
+                            loss='binary_crossentropy')
 
         # Train the convolutional autoencoder to denoise samples
         # Takes noisy data as input and clean data output
         autoencoder.fit(x_train_noisy, x_train,
-                        epochs = n_epochs,
-                        batch_size = batch_size,
+                        epochs = n_epochs_CAE,
+                        batch_size = batch_size_CAE,
                         shuffle = True,
                         validation_data = (x_test_noisy, x_test),
                         callbacks = [TensorBoard(log_dir='/tmp/tb', histogram_freq=0, write_graph=False)])
@@ -250,18 +237,15 @@ def main():
         autoencoder.save(CAE_model_filename)  # creates a HDF5 file
 
     #
-    # Visualization: plot example test reconstructions of the trained encoding/decoding
-    #
-    decoded_noisy_test_imgs = autoencoder.predict(x_test_noisy)
-    plot_compare(x_test_noisy, decoded_noisy_test_imgs)
-
-    #
     # Denoise noisy query images and plot
     #
-    if 1:
-        denoised_query_imgs = autoencoder.predict(x_query)
-        plot_unlabeled_images_random(denoised_query_imgs, 5, "Denoising extracted query images", ypixels, xpixels)
-        x_query = denoised_query_imgs
+    denoised_query_imgs = autoencoder.predict(x_query)
+
+    if 0:
+        plot_compare(x_query, denoised_query_imgs, "answer/CAE_denoiser.png")
+        #plot_unlabeled_images_random(denoised_query_imgs, 10, "Denoising query images", ypixels, xpixels)
+
+    x_query = denoised_query_imgs  # set as the query images now
 
     # ==================================================
     # Train the CNN to classify the denoised images
@@ -271,9 +255,6 @@ def main():
         cnn = load_model(CNN_model_filename)  # load saved model
 
     else:
-
-        batch_size = batch_size_CNN
-        n_epochs = n_epochs_CNN
 
         # Build our CNN mode layer-by-layer
         cnn = Sequential()
@@ -288,15 +269,15 @@ def main():
 
         # Set our optimizer and loss function (similar settings to our CAE approach)
         cnn.compile(loss = keras.losses.categorical_crossentropy,
-                      optimizer = keras.optimizers.Adadelta(),
-                      metrics = ['accuracy'])
+                    optimizer = keras.optimizers.Adadelta(),
+                    metrics = ['accuracy'])
 
         # Train our CNN
         cnn.fit(x_train, y_train,
-                  batch_size = batch_size,
-                  epochs = n_epochs,
-                  verbose = 1,
-                  validation_data = (x_test, y_test))
+                batch_size = batch_size_CNN,
+                epochs = n_epochs_CNN,
+                verbose = 1,
+                validation_data = (x_test, y_test))
 
         # Save trained CNN model
         cnn.save(CNN_model_filename)  # creates a HDF5 file
@@ -310,24 +291,34 @@ def main():
     # Visualization: print 10 randomly selected test images and their classifications
     # Note that we kept original test data sets for the purpose of printing here
     #
-    if 1:
+    if 0:
         x_test_plot = x_test_original.copy()
-        x_test_plot = np.array(x_test_plot).reshape((len(x_test_plot), 28, 28, 1))  # reshape
+        x_test_plot = np.array(x_test_plot).reshape((len(x_test_plot), ypixels, xpixels, 1))  # reshape
         y_test_plot_pred = cnn.predict_classes(x_test_plot)  # predict the class index (integer)
+
         print("Plotting test predictions")
-        plot_labeled_images_random(x_test_original, y_test_plot_pred, categories, 5,
-                                   "Classifying test images", ypixels, xpixels)
+        plot_labeled_images_random(x_test_original, y_test_plot_pred, categories, 10,
+                                   "Classifying test images", ypixels, xpixels, seed,
+                                   "answer/origtest_to_pred.png")
+        plot_labeled_images_random(x_test_noisy, y_test_plot_pred, categories, 10,
+                                   "Classifying test images", ypixels, xpixels, seed,
+                                   "answer/noisytest_to_pred.png")
 
     #
     # Classify denoised query images and plot it
     #
     if 1:
         x_query_plot = x_query.copy()
-        x_query_plot = np.array(x_query_plot).reshape((len(x_query_plot), 28, 28, 1))  # reshape
+        x_query_plot = np.array(x_query_plot).reshape((len(x_query_plot), ypixels, xpixels, 1))  # reshape
         y_query_plot_pred = cnn.predict_classes(x_query_plot)  # predict the class index (integer)
-        print("Plotting extracted query predictions")
-        plot_labeled_images_random(x_query_original, y_query_plot_pred, categories, 5,
-                                   "Classifying extracted query images", ypixels, xpixels)
+
+        print("Plotting query predictions")
+        plot_labeled_images_random(x_query_original, y_query_plot_pred, categories, 10,
+                                   "Classifying extracted query images", ypixels, xpixels, seed,
+                                   "answer/CAE.png")
+        plot_labeled_images_random(x_query, y_query_plot_pred, categories, 10,
+                                   "Classifying extracted query images", ypixels, xpixels, seed,
+                                   "answer/noisyquery_to_preds.png")
 
 
 
@@ -361,8 +352,9 @@ def convert_norm2img(norm_list, ypixels, xpixels):
     return img_list
 
 # plot_labeled_images_random: plots labeled images at random
-def plot_labeled_images_random(image_list, label_list, categories, n, title_str, ypixels, xpixels):
-    index_sample = np.random.choice(len(image_list), n)
+def plot_labeled_images_random(image_list, label_list, categories, n, title_str, ypixels, xpixels, seed, filename):
+    random.seed(seed)
+    index_sample = random.sample(range(len(image_list)), n)
     plt.figure(figsize=(2*n, 2))
     #plt.suptitle(title_str)
     for i, ind in enumerate(index_sample):
@@ -371,11 +363,15 @@ def plot_labeled_images_random(image_list, label_list, categories, n, title_str,
         plt.gray()
         ax.set_title("pred: " + categories[label_list[ind]])
         ax.get_xaxis().set_visible(False); ax.get_yaxis().set_visible(False)
-    plt.show()
+    if 1:
+        pylab.savefig(filename)
+    else:
+        plt.show()
 
 # plot_unlabeled_images_random: plots unlabeled images at random
-def plot_unlabeled_images_random(image_list, n, title_str, ypixels, xpixels):
-    index_sample = np.random.choice(len(image_list), n)
+def plot_unlabeled_images_random(image_list, n, title_str, ypixels, xpixels, seed, filename):
+    random.seed(seed)
+    index_sample = random.sample(range(len(image_list)), n)
     plt.figure(figsize=(2*n, 2))
     plt.suptitle(title_str)
     for i, ind in enumerate(index_sample):
@@ -383,10 +379,13 @@ def plot_unlabeled_images_random(image_list, n, title_str, ypixels, xpixels):
         plt.imshow(image_list[ind].reshape(ypixels, xpixels))
         plt.gray()
         ax.get_xaxis().set_visible(False); ax.get_yaxis().set_visible(False)
-    plt.show()
+    if 1:
+        pylab.savefig(filename)
+    else:
+        plt.show()
 
 # plot_compare: given test images and their reconstruction, we plot them for visual comparison
-def plot_compare(x_test, decoded_imgs):
+def plot_compare(x_test, decoded_imgs, filename):
     n = 10
     plt.figure(figsize=(2*n, 4))
     for i in range(n):
@@ -403,7 +402,11 @@ def plot_compare(x_test, decoded_imgs):
         plt.gray()
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
-    plt.show()
+
+    if 1:
+        pylab.savefig(filename)
+    else:
+        plt.show()
 
 # plot_img: plots greyscale image
 def plot_img(img, title_str, fignum):
@@ -415,8 +418,8 @@ def plot_img(img, title_str, fignum):
 
 # read image
 def read_img(img_filename, gray_scale=False):
-        img = np.array(scipy.misc.imread(img_filename, flatten=gray_scale))
-        return img
+    img = np.array(scipy.misc.imread(img_filename, flatten=gray_scale))
+    return img
 
 #
 # Driver file
