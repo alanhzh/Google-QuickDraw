@@ -241,9 +241,15 @@ def main():
     #
     denoised_query_imgs = autoencoder.predict(x_query)
 
-    if 0:
-        plot_compare(x_query, denoised_query_imgs, "answer/CAE_denoiser.png")
-        #plot_unlabeled_images_random(denoised_query_imgs, 10, "Denoising query images", ypixels, xpixels)
+    if 1:
+
+        plot_unlabeled_images_random(x_query, 10,
+                                     "", ypixels, xpixels, seed,
+                                     "answer/query_input.png")
+
+        plot_unlabeled_images_random(denoised_query_imgs, 10,
+                                     "", ypixels, xpixels, seed,
+                                     "answer/CAE_result.png")
 
     x_query = denoised_query_imgs  # set as the query images now
 
@@ -288,24 +294,8 @@ def main():
     print('CNN classification test accuracy: {0}%'.format(score[1]))
 
     #
-    # Visualization: print 10 randomly selected test images and their classifications
+    # Visualization: print 10 randomly selected query images and their classifications
     # Note that we kept original test data sets for the purpose of printing here
-    #
-    if 0:
-        x_test_plot = x_test_original.copy()
-        x_test_plot = np.array(x_test_plot).reshape((len(x_test_plot), ypixels, xpixels, 1))  # reshape
-        y_test_plot_pred = cnn.predict_classes(x_test_plot)  # predict the class index (integer)
-
-        print("Plotting test predictions")
-        plot_labeled_images_random(x_test_original, y_test_plot_pred, categories, 10,
-                                   "Classifying test images", ypixels, xpixels, seed,
-                                   "answer/origtest_to_pred.png")
-        plot_labeled_images_random(x_test_noisy, y_test_plot_pred, categories, 10,
-                                   "Classifying test images", ypixels, xpixels, seed,
-                                   "answer/noisytest_to_pred.png")
-
-    #
-    # Classify denoised query images and plot it
     #
     if 1:
         x_query_plot = x_query.copy()
@@ -313,12 +303,9 @@ def main():
         y_query_plot_pred = cnn.predict_classes(x_query_plot)  # predict the class index (integer)
 
         print("Plotting query predictions")
-        plot_labeled_images_random(x_query_original, y_query_plot_pred, categories, 10,
-                                   "Classifying extracted query images", ypixels, xpixels, seed,
-                                   "answer/CAE.png")
         plot_labeled_images_random(x_query, y_query_plot_pred, categories, 10,
                                    "Classifying extracted query images", ypixels, xpixels, seed,
-                                   "answer/noisyquery_to_preds.png")
+                                   "answer/CNN_result.png")
 
 
 
