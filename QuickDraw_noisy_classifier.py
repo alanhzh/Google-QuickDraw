@@ -354,7 +354,7 @@ def plot_labeled_images_random(image_list, label_list, categories, n, title_str,
         ax = plt.subplot(1, n, i + 1)
         plt.imshow(image_list[ind].reshape(ypixels, xpixels))
         plt.gray()
-        ax.set_title("pred: " + categories[label_list[ind]])
+        ax.set_title(categories[label_list[ind]], fontsize=20)
         ax.get_xaxis().set_visible(False); ax.get_yaxis().set_visible(False)
     if 1:
         pylab.savefig(filename)
