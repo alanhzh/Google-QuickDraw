@@ -39,72 +39,69 @@ def main():
     # =======================================================
     data_dir = "/Users/ansonwong/Desktop/training_heaven/QuickDraw"
     categories = ['cat', 'cup', 'fish', 'jacket', 'pineapple']  # sets item/animal categories
-    xpixels = 28  # set x pixel numbers for task/training/test examples
-    ypixels = 28  # set y pixel numbers for task/training/test examples
+    xpixels = 28  # set x pixel numbers for query/training/test examples
+    ypixels = 28  # set y pixel numbers for query/training/test examples
     noise_factor = 0.5  # how much gaussian noise to add to our noisy images [0,1]
 
     CAE_model_filename = 'models/convAE_trained.h5'  # save/load conv AE model filename
-    n_epochs_CAE = 5  # number of epochs for CAE training (30)
+    n_epochs_CAE = 20  # number of epochs for CAE training (20)
     batch_size_CAE = 512  # batch size of CAE training
 
     CNN_model_filename = 'models/convNN_trained.h5'  # save/load conv NN model filename
-    n_epochs_CNN = 1  # number of epochs for CNN training (5)
+    n_epochs_CNN = 5  # number of epochs for CNN training (5)
     batch_size_CNN = 512  # batch size of CNN training
 
+    n_query_category = 4  # number of query images to take from each category
+
+
+    # =======================================================
+    #
+    # Create query images
+    # Noisy up some clean Google SketchRNN images and embed them into a noisy large background.
+    #
+    # =======================================================
     check_noisydata = False  # check noisy data before run?
     check_original_training = False  # check original training images before run?
     check_original_test = False  # check original test images before run?
 
-    # =======================================================
-    #
-    # Create task images
-    # Noisy up some clean Google SketchRNN images and embed them into a noisy large background.
-    #
-    # =======================================================
-    n_task_category = 4  # number of test images to take from each category
     category_filenames = []
     for catname in categories:
         filename = os.path.join(data_dir, "full%2Fnumpy_bitmap%2F" + catname + ".npy")
         category_filenames.append(filename)
     
-    # Read data and extract some for task data
-    x_task_create = []
+    # Read data and extract some for query data
+    x_query_create = []
     n_remaining_category = []
     for i_category, category in enumerate(categories):
         data = np.load(category_filenames[i_category])
         n_total = len(data)
-        print("Reading data for category index {0}/{1} = '{2}' (shape = {3})".format(
+        print("Reading data for category index {0}/{1}: '{2}' (shape = {3})".format(
             i_category, len(categories), category, data.shape))
-        for j in range(n_task_category):
+        for j in range(n_query_category):
             img = np.array(data[j]).reshape((ypixels, xpixels))
-            x_task_create.append(img)
-        n_remaining_category.append(n_total-n_task_category)
-    x_task_create = np.array(x_task_create)
+            x_query_create.append(img)
+        n_remaining_category.append(n_total-n_query_category)
+    x_query_create = np.array(x_query_create)
 
 
     # Set number of training and test data
-    n_take_train = min(8000, min(n_remaining_category))  # number of training images to take from each category
-    n_take_test = min(1600, min(n_remaining_category))  # number of test images to take from each category
+    n_take_train = min([8000, min(n_remaining_category)])  # number of training images to take from each category
+    n_take_test = min([1600, min(n_remaining_category)])  # number of test images to take from each category
     print("n_take_train = {0}".format(n_take_train))
     print("n_take_test = {0}".format(n_take_test))
 
-
     # Add noise to our greyscale image
-    x_task_create_final = add_noise(x_task_create, noise_factor)
+    x_query_create_final = add_noise(x_query_create, noise_factor)
 
-    if 0:
-        plot_img(x_task_create_final[0], "1) Object Image", 1)
-        sys.exit()
-
-    for i in range(n_task_category*len(categories)):
-        print("Printing task image %d to file..." % (i+1))
-        scipy.misc.imsave("query/task_image_%d.jpg" % (i + 1), x_task_create_final[i])
+    for i in range(n_query_category*len(categories)):
+        print("Printing query image %d to file..." % (i+1))
+        scipy.misc.imsave("query/query_image_%d.jpg" % (i + 1), x_query_create_final[i])
 
 
     # =======================================================
     #
     # Data I/O and Preprocessing
-    # Read QuickDraw image datanand append them to the training/test sets.
+    # Read QuickDraw image data and append them to the training/test sets.
     # We take original copies of it, and also create noisy copies of them too.
     #
     # =======================================================
@@ -118,10 +115,10 @@ def main():
     for index_category, category in enumerate(categories):
         
         data = np.load(category_filenames[index_category])
-        data = data[n_task_category:]  # omit the task images extracted earlier
+        data = data[n_query_category:]  # omit the query images extracted earlier
 
         n_data = len(data)
-        print("[%d/%d] Reading category index %d :'%s' (%d images: take %d training, take %d test)" %
+        print("[%d/%d] Reading category index %d: '%s' (%d images: take %d training, take %d test)" %
               (index_category, len(categories), index_category, category, n_data, n_take_train, n_take_test))
         
         for j, data_j in enumerate(data):
@@ -153,30 +150,30 @@ def main():
 
 
     #
-    # Read task images
+    # Read query images
     #
-    x_task_raw = []
-    x_task_extracted = []
-    for i in range(n_task_category*len(categories)):
+    x_query_raw = []
+    x_query_extracted = []
+    for i in range(n_query_category*len(categories)):
 
-        # Read the task images
-        task_image_filename = "query/task_image_%d.jpg" % (i+1)
-        task_img_i = read_img(task_image_filename, gray_scale=True)
-        x_task_extracted.append(task_img_i)
+        # Read the query images
+        query_image_filename = "query/query_image_%d.jpg" % (i+1)
+        query_img_i = read_img(query_image_filename, gray_scale=True)
+        x_query_extracted.append(query_img_i)
         if 0:
-            plot_img(task_img_i, "Extracted task image", 1)
+            plot_img(query_img_i, "Extracted task image", 1)
 
-    x_task = np.array(x_task_extracted.copy())  # convert extracted version to numpy array (should already by numpy)
-    x_task_raw = np.array(x_task_raw)
-    x_task_original = x_task.copy()  # copy original just in case
+    x_query = np.array(x_query_extracted.copy())  # convert extracted version to numpy array (should already by numpy)
+    x_query_raw = np.array(x_query_raw)
+    x_query_original = x_query.copy()  # copy original just in case
 
-    x_task = convert_img2norm(x_task, ypixels, xpixels)  # normalize and reshape
+    x_query = convert_img2norm(x_query, ypixels, xpixels)  # normalize and reshape
 
     if 0:
         # Print an example to familiarize with extracting from the raw task image
         fignum = 1
-        fignum = plot_img(x_task_raw[0], "Task Image Raw", fignum)
-        fignum = plot_img(x_task_extracted[0], "Task Image Extracted", fignum)
+        fignum = plot_img(x_query_raw[0], "Query Image Raw", fignum)
+        fignum = plot_img(x_query_extracted[0], "Query Image Extracted", fignum)
         sys.exit()
 
     #
@@ -259,12 +256,12 @@ def main():
     plot_compare(x_test_noisy, decoded_noisy_test_imgs)
 
     #
-    # Denoise noisy task images and plot
+    # Denoise noisy query images and plot
     #
     if 1:
-        denoised_task_imgs = autoencoder.predict(x_task)
-        plot_unlabeled_images_random(denoised_task_imgs, 5, "Denoising extracted task images", ypixels, xpixels)
-        x_task = denoised_task_imgs
+        denoised_query_imgs = autoencoder.predict(x_query)
+        plot_unlabeled_images_random(denoised_query_imgs, 5, "Denoising extracted query images", ypixels, xpixels)
+        x_query = denoised_query_imgs
 
     # ==================================================
     # Train the CNN to classify the denoised images
@@ -322,15 +319,15 @@ def main():
                                    "Classifying test images", ypixels, xpixels)
 
     #
-    # Classify denoised task images and plot it
+    # Classify denoised query images and plot it
     #
     if 1:
-        x_task_plot = x_task.copy()
-        x_task_plot = np.array(x_task_plot).reshape((len(x_task_plot), 28, 28, 1))  # reshape
-        y_task_plot_pred = cnn.predict_classes(x_task_plot)  # predict the class index (integer)
-        print("Plotting extracted task predictions")
-        plot_labeled_images_random(x_task_original, y_task_plot_pred, categories, 5,
-                                   "Classifying extracted task images", ypixels, xpixels)
+        x_query_plot = x_query.copy()
+        x_query_plot = np.array(x_query_plot).reshape((len(x_query_plot), 28, 28, 1))  # reshape
+        y_query_plot_pred = cnn.predict_classes(x_query_plot)  # predict the class index (integer)
+        print("Plotting extracted query predictions")
+        plot_labeled_images_random(x_query_original, y_query_plot_pred, categories, 5,
+                                   "Classifying extracted query images", ypixels, xpixels)
 
 
 
