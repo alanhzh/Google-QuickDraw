@@ -240,17 +240,6 @@ def main():
     # Denoise noisy query images and plot
     #
     denoised_query_imgs = autoencoder.predict(x_query)
-
-    if 1:
-
-        plot_unlabeled_images_random(x_query, 10,
-                                     "", ypixels, xpixels, seed,
-                                     "answer/query_input.png")
-
-        plot_unlabeled_images_random(denoised_query_imgs, 10,
-                                     "", ypixels, xpixels, seed,
-                                     "answer/CAE_result.png")
-
     x_query = denoised_query_imgs  # set as the query images now
 
     # ==================================================
@@ -303,9 +292,26 @@ def main():
         y_query_plot_pred = cnn.predict_classes(x_query_plot)  # predict the class index (integer)
 
         print("Plotting query predictions")
+
+        # original noisy query images
+        plot_unlabeled_images_random(x_query_original, 10,
+                                     "", ypixels, xpixels, seed,
+                                     "answer/query.png")
+
+        # use CAE: noisy image -> clean image
+        plot_unlabeled_images_random(denoised_query_imgs, 10,
+                                     "", ypixels, xpixels, seed,
+                                     "answer/CAE_result.png")
+
+        # use CNN: denoised image -> predict label
         plot_labeled_images_random(x_query, y_query_plot_pred, categories, 10,
                                    "Classifying extracted query images", ypixels, xpixels, seed,
                                    "answer/CNN_result.png")
+
+        # main result: noisy query images -> predict label
+        plot_labeled_images_random(x_query_original, y_query_plot_pred, categories, 10,
+                                   "Classifying extracted query images", ypixels, xpixels, seed,
+                                   "answer/MAIN_result.png")
 
 
 
