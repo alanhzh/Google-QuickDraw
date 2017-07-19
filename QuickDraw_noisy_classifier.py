@@ -31,11 +31,16 @@ def main():
 
     # =======================================================
     #
-    # Set parameters for our run
+    # Manually set user parameters
     #
     # =======================================================
     data_dir = "/Users/ansonwong/Desktop/training_heaven/QuickDraw"
     categories = ['cat', 'cup', 'fish', 'jacket', 'pineapple']  # sets item/animal categories
+
+
+    # =======================================================
+    # Automatically set remainder parameters
+    # =======================================================
     xpixels = 28  # set x pixel numbers for query/training/test examples
     ypixels = 28  # set y pixel numbers for query/training/test examples
     noise_factor = 0.5  # how much gaussian noise to add to our noisy images [0,1]
@@ -50,6 +55,7 @@ def main():
 
     n_query_category = 2  # number of query images to take from each category
     seed = 101
+
 
     # =======================================================
     #
@@ -194,6 +200,7 @@ def main():
     # =================================================
     input_shape = (ypixels, xpixels, 1)  # our data format for the input layer of our NNs
 
+
     # ==================================================
     # Train the CAE to denoise the images
     # ==================================================
@@ -241,6 +248,7 @@ def main():
     #
     denoised_query_imgs = autoencoder.predict(x_query)
     x_query = denoised_query_imgs  # set as the query images now
+
 
     # ==================================================
     # Train the CNN to classify the denoised images
