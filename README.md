@@ -11,16 +11,16 @@ Below we provide the algorithm steps, usage instructions, and how instructions f
 
 ## The algorithm: 
 
-### 1) Extract training/validation/query images from Google QuickDraw, and make noisy copies by adding random Gaussian noise to them. Here we show the query images with added Gaussian noise.
+#### 1) Extract training/validation/query images from Google QuickDraw, and make noisy copies by adding random Gaussian noise to them. Here we show the query images with added Gaussian noise.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="100%" align="center">
 
-### 2.a) Using the clean and noisy training/validation dataset, we train a convolutional autoencoder (convAE) to learn to denoise. We then apply this to the noisy query images.
+#### 2.a) Using the clean and noisy training/validation dataset, we train a convolutional autoencoder (convAE) to learn to denoise. We then apply this to the noisy query images.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="100%" align="center">
 
-### 2.b) Using the clean training/validation dataset, we train an sketch object classifier using convolutional neural networks (convNN). We then apply this to the denoised query images.
+#### 2.b) Using the clean training/validation dataset, we train an sketch object classifier using convolutional neural networks (convNN). We then apply this to the denoised query images.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="100%" align="center">
 
-### 3) Having denoised the noisy query images and classified the sketch object in the image, we have our final result of a classification for noisy sketch images.
+#### 3) Having denoised the noisy query images and classified the sketch object in the image, we have our final result of a classification for noisy sketch images.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" height="100%" align="center">
 
 
