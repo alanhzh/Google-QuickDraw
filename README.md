@@ -1,6 +1,6 @@
 # Classifying noisy Google-QuickDraw images (keras)
 
-Given Gaussian-noised sketch images from the Google QuickDraw dataset, we classify the object found inside the noisy image by first denoising it, then after classify the denoised image. An example result of our trained noisy classifier on 10 randomly selected noisy images
+Given Gaussian-noised sketch images from the Google QuickDraw dataset, we classify the object found inside the noisy image by first denoising it, then classifying the denoised image. An example result of our trained noisy classifier on 10 randomly selected noisy images
 
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" height="100%" align="center">
 
