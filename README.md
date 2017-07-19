@@ -35,15 +35,13 @@ The result of this run will be saved into the `answer` directory.
 ## How to freshly train the model using custom-selected Google QuickDraw data:
 If you are feeling ambitious, you can freshly train the model using your own custom-selected Google QuickDraw data set, delete the existing `.h5` models from the `models` directory (this will force it to train and save the models). Afterwards, download some Google QuickDraw object datasets from https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap?pli=1 and place them in a folder of your liking. This folder will contain the training, validation, and test (query) data for the run.
 
-The last step is to edit two variables in `QuickDraw_noisy_classifier.py` to account for your custom data: 
+The last step is to edit two variables: `data_dir` and `categories` in `QuickDraw_noisy_classifier.py` to account for your custom data: 
 
-`data_dir` which is the directory where your Google QuickDraw `.npy` data files with `full%2Fnumpy_bitmap%2F` header are located
+- `data_dir` is the directory where your Google QuickDraw `.npy` data files (with `full%2Fnumpy_bitmap%2F` header) were placed in
 
-and
+- `categories` is a list of the object category name strings you downloaded 
 
-`categories` which is a list of the category name strings you downloaded 
-
-After this, the previous usage instructions will be applicable where you can train the model and classify the noisy query images by running:
+After this, the previous usage instructions will be applicable where you can train the model and classify the noisy query images at the same time by running:
 
 > python QuickDraw_noisy_classifier.py
 
