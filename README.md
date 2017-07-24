@@ -1,46 +1,51 @@
 # Classifying noisy Google-QuickDraw images (keras)
 
-Given Gaussian-noised sketch images from the Google QuickDraw dataset, we classify the object found inside the noisy image by first denoising it, then classifying the denoised image. An example result of our trained noisy classifier on 10 randomly selected noisy images
+Given noisy images from the Google QuickDraw data set, we classify the object sketched inside the noisy image by denoising the image, then classifying the 'denoised' object. Although the QuickDraw data set contains 200+ sketch class labels, we select only 5 (specifically: pineapples, cats, fish, cups, and jackets) for the simple demonstration of how to denoise sketch images using autoencoders, then classify them using convolutional neural networks. An example result of performing our noisy classifier on 10 randomly selected noisy images
 
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" height="100%" align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" align="center">
 
-The files provided here consists of a trained model and some example query images to test it with (we did not include the data set as open-sourced at https://github.com/googlecreativelab/quickdraw-dataset, and our minimal training data was already > 500Mb). We also incorporateed 5 sketch object classes in the training of the model (specifically: pineapples, cats, fish, cups, and jackets) for simplicity -- the Google QuickDraw dataset contains a couple hundred more class labels that you can experiment with, but our purpose here was to demonstrate the ability to denoise sketch images using autoencoders and later classify them using convolutional neural networks.
+The provided files include the training code, an already trained model, and some example query images to apply the model to (we omitted > 500Mb worth of QuickDraw training data; they are open-sourced at https://github.com/googlecreativelab/quickdraw-dataset). 
 
-Below we provide the algorithm steps with visualizations, usage instructions, and how you can also newly train the model using your own custom-selected QuickDraw data.
+Below are the algorithmic steps we used to train our model (visualizations included), along with usage instructions for how to use the model or even freshly train the model to your own custom-selected QuickDraw data set.
 
+## Algorithm (visualizations are on query images): 
 
-## The algorithm: 
-
-#### 1) Extract training/validation/query images from Google QuickDraw, and make noisy copies by adding random Gaussian noise to them. Here we demonstrate our query images with added Gaussian noise.
+#### 1. We extract the training/validation/query images from provided Google QuickDraw dataset and add random Gaussian noise to them.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="100%" align="center">
 
-#### 2.a) Using the clean and noisy training/validation dataset, we train a convolutional autoencoder (convAE) to learn to denoise. We then apply this to the noisy query images.
+#### 2.  Using clean and noisy training/validation sketches, we train a convolutional autoencoder to learn how to denoise the images. 
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="100%" align="center">
 
-#### 2.b) Using the clean training/validation dataset, we train a sketch object classifier using convolutional neural networks (convNN). We then apply this to the denoised query images.
+#### 3. Using clean training/validation sketches, we train a classifier using convolutional neural networks.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="100%" align="center">
 
-#### 3) Having our trained denoiser and classifier models, we have finished building a procedure for classifying noisy sketch images.
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" height="100%" align="center">
+#### 4. Having trained our denoiser and classifier, we can now classify noisy sketch images by applying them sequentially.
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" align="center">
 
 
 ## Usage:
-To use the pre-existing trained model to classify our noisy query images (found in the `query` directory), run the command:
 
-> python QuickDraw_noisy_classifier.py
+### Usage 1 (apply model to query images)
+To use the provided trained model (in `models`) to classify our provided noisy query images (in `query`), run the command:
+``python
+python QuickDraw_noisy_classifier.py
+``
+The result of this run will be saved to `answer`.
 
-The result of this run will be saved to the `answer` directory.
+### Usage 2 (freshly train model, then apply model to query images)
+You can freshly train a model using your own custom-selected Google QuickDraw data by:
 
+1. Download your desired sketch classes from from https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap?pli=1 and placed them all into a folder of your liking. 
 
-## How to freshly train the model using custom-selected Google QuickDraw data:
-If you are feeling ambitious, you can freshly train the model using your own custom-selected Google QuickDraw data set downloaded from https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap?pli=1 and placed in a folder of your liking. Make sure to delete the existing `.h5` models from the `models` directory (this will force the run to newly train and save the models). 
+2. Delete all existing `.h5` models from the `models` directory (their absense will force the code to newly train/save the models). 
 
-The last step before you run is to edit two important variables: `data_dir` and `categories` in `QuickDraw_noisy_classifier.py` to account for your custom data: 
+3. Edit two important variables in `QuickDraw_noisy_classifier.py`: `data_dir` and `categories`. `data_dir` is the directory where you stored your new QuickDraw `.npy` data files (which should have a `full%2Fnumpy_bitmap%2F` header, make sure of this!). `categories` is the list of the object category name strings you downloaded.
 
-- `data_dir` is the directory where your Google QuickDraw `.npy` data files (with `full%2Fnumpy_bitmap%2F` header) were placed in
+After following these instructions, running:
+``python
+python QuickDraw_noisy_classifier.py
+``
+will train/save the model with your QuickDraw data set, classify new noisy query images, and place the results into `answer`.
 
-- `categories` is a list of the object category name strings you downloaded 
-
-After this, the previous usage instructions will be applicable where you can train the model and classify the noisy query images at the same time by running:
-
-> python QuickDraw_noisy_classifier.py
+## Libraries required:
+* keras 
