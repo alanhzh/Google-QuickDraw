@@ -1,39 +1,39 @@
 # Classifying noisy Google-QuickDraw images (keras)
 
-Given noisy versions of the Google QuickDraw sketch image data set, we classify the object sketched inside the noisy image by denoising the image, then classifying the 'denoised' object. We select 5 object classes: pineapples, cats, fish, cups, and jackets, for the simple demonstration of how to denoise sketch images using autoencoders, then classify them using convolutional neural networks. An example result of performing our noisy classifier on 10 randomly selected noisy images:
+Given noisy versions of the Google QuickDraw sketch image data set, we aim to classify the object sketched inside the noisy image. The procedure performed here is to first denoise the noisy image using autoencoders, then classify the image object using convolutional neural networks. For our training, we selected 5 object classes to train on: pineapples, cats, fish, cups, and jackets (~ 500Mb of data). An example result of performing our noisy classifier model on 10 noisy query images:
 
 <p align="center">
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%">
 </p>
 
-The files provide here include the training code, an already trained noisy classifier model, and some example query images to apply the model to (we did not include the QuickDraw data set as it exceeded 500Mb in size and are open-sourced at https://github.com/googlecreativelab/quickdraw-dataset). 
+The files provided here include the training code, an already trained noisy classifier model, and some example query images to apply the model to (we omitted including the training data as it was too large in size, and is publicly available for download at https://github.com/googlecreativelab/quickdraw-dataset). 
 
-Below is the algorithm we used to train our model (visualizations included), alongside the usage instructions for how to use the provided model as is, or freshly train the model yourself using your own custom-selected QuickDraw object classes.
+Below is the algorithm we used to train our model (visualizations included), alongside some usage instructions for how to use the provided model as is, or freshly train the model yourself using your own custom-selected classes from the QuickDraw data set.
 
 ## Algorithm: 
 
-1. We extract the training/validation/query images from provided Google QuickDraw dataset and add random Gaussian noise to them.
+1. We extract clean training/validation/query images from our selected Google QuickDraw classes and add random Gaussian noise to them.
 
 <p align="center">
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="90%" align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="90%">
 </p>
 
-2. Using clean and noisy training/validation sketches, we train a convolutional autoencoder to learn how to denoise the images. 
+2. Using both the clean and noisy training/validation sketch images, we train a convolutional autoencoder to learn how to denoise the noisy images. 
 
 <p align="center">
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="90%" align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="90%">
 </p>
 
-3. Using clean training/validation sketches, we train a classifier using convolutional neural networks.
+3. Using only the clean training/validation sketch images, we train a clean classifier using convolutional neural networks.
 
 <p align="center">
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="90%" align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="90%">
 </p>
 
-4. Having trained our denoiser and classifier, we can now classify noisy sketch images by applying to them the denoiser then the classifier.
+4. Now with a trained denoiser and classifier in hand, we can classify noisy sketch images by applying the denoiser first then the classifier
 
 <p align="center">
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%" align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%">
 </p>
 
 ## Usage:
