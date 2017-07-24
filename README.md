@@ -1,4 +1,4 @@
-# Classifying noisy Google-QuickDraw images (keras)
+# Classifying noisy Google QuickDraw images (keras)
 
 Given noisy versions of the Google QuickDraw sketch image data set, we aim to classify the object sketched inside the noisy image. The procedure performed here is to first denoise the noisy image using autoencoders, then classify the image object using convolutional neural networks. For our training, we selected 5 object classes to train on: pineapples, cats, fish, cups, and jackets (~ 500Mb of data). An example result of performing our noisy classifier model on 10 noisy query images:
 
