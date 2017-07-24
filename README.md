@@ -8,18 +8,18 @@ The files provide here include the training code, an already trained noisy class
 
 Below is the algorithm we used to train our model (visualizations included), alongside the usage instructions for how to use the provided model as is, or freshly train the model yourself using your own custom-selected QuickDraw object classes.
 
-## Algorithm (visualizations are on query images): 
+## Algorithm: 
 
 #### 1. We extract the training/validation/query images from provided Google QuickDraw dataset and add random Gaussian noise to them.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="100%" align="center">
 
-#### 2.  Using clean and noisy training/validation sketches, we train a convolutional autoencoder to learn how to denoise the images. 
+#### 2a.  Using clean and noisy training/validation sketches, we train a convolutional autoencoder to learn how to denoise the images. 
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="100%" align="center">
 
-#### 3. Using clean training/validation sketches, we train a classifier using convolutional neural networks.
+#### 2b. Using clean training/validation sketches, we train a classifier using convolutional neural networks.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="100%" align="center">
 
-#### 4. Having trained our denoiser and classifier, we can now classify noisy sketch images by applying them sequentially.
+#### 3. Having trained our denoiser and classifier, we can now classify noisy sketch images by applying to them the denoiser then the classifier.
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="100%" align="center">
 
 
@@ -27,9 +27,11 @@ Below is the algorithm we used to train our model (visualizations included), alo
 
 ### Usage 1 (apply model to query images)
 To use the provided trained model (in `models`) to classify our provided noisy query images (in `query`), run the command:
-``python
-python QuickDraw_noisy_classifier.py
+
 ``
+> python QuickDraw_noisy_classifier.py
+``
+
 The result of this run will be saved to `answer`.
 
 ### Usage 2 (freshly train model, then apply model to query images)
