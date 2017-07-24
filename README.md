@@ -1,12 +1,12 @@
 # Classifying noisy Google-QuickDraw images (keras)
 
-Given noisy versions of the Google QuickDraw sketch image data set, we classify the object sketched inside the noisy image by denoising the image, then classifying the 'denoised' object. Although the QuickDraw data set contains 200+ sketch class labels, we select only 5 (specifically: pineapples, cats, fish, cups, and jackets) for the simple demonstration of how to denoise sketch images using autoencoders, then classify them using convolutional neural networks. An example result of performing our noisy classifier on 10 randomly selected noisy images
+Given noisy versions of the Google QuickDraw sketch image data set, we classify the object sketched inside the noisy image by denoising the image, then classifying the 'denoised' object. We select 5 object classes: pineapples, cats, fish, cups, and jackets, for the simple demonstration of how to denoise sketch images using autoencoders, then classify them using convolutional neural networks. An example result of performing our noisy classifier on 10 randomly selected noisy images:
 
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="150%" align="center">
 
-The provided files include the training code, an already trained model, and some example query images to apply the model to (we omitted > 500Mb worth of QuickDraw training data; they are open-sourced at https://github.com/googlecreativelab/quickdraw-dataset). 
+The files provide here include the training code, an already trained noisy classifier model, and some example query images to apply the model to (we did not include the QuickDraw data set as it exceeded 500Mb in size and are open-sourced at https://github.com/googlecreativelab/quickdraw-dataset). 
 
-Below are the algorithmic steps we used to train our model (visualizations included), along with usage instructions for how to use the model or even freshly train the model to your own custom-selected QuickDraw data set.
+Below is the algorithm we used to train our model (visualizations included), alongside the usage instructions for how to use the provided model as is, or freshly train the model yourself using your own custom-selected QuickDraw object classes.
 
 ## Algorithm (visualizations are on query images): 
 
