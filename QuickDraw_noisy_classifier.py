@@ -2,12 +2,12 @@
 
  QuickDraw_noisy_classifier.py (author: Anson Wong / git: ankonzoid)
  
- Given a set of Gaussian-noisy sketch greyscale images that are of size 28x28 taken
+ Given a set of Gaussian-noisy sketch greyscale images of size 28x28 pixels taken
  from Google's QuickDraw data set:
 
  https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap
 
- We create a model that tries to denoise the image, then classifies the object in the image.
+ We create a model that denoise the image, then classifies the image object.
 
  The main steps:
   1) Create/collect query images for classification, and clean images for training
@@ -20,7 +20,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import keras
-from keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D  # CAE
+from keras.layers import Input, UpSampling2D  # CAE
 from keras.models import Model  # CAE
 from keras.callbacks import TensorBoard  # CAE
 from keras.models import Sequential  # CNN
@@ -60,7 +60,7 @@ def main():
     # =======================================================
     #
     # Create query images
-    # Noisy up some clean Google SketchRNN images and embed them into a noisy large background.
+    # Noise up some clean Google QuickDraw images
     #
     # =======================================================
     check_noisydata = False  # check noisy data before run?
@@ -365,7 +365,7 @@ def plot_labeled_images_random(image_list, label_list, categories, n, title_str,
         ax.set_title(categories[label_list[ind]], fontsize=20)
         ax.get_xaxis().set_visible(False); ax.get_yaxis().set_visible(False)
     if 1:
-        pylab.savefig(filename)
+        pylab.savefig(filename, bbox_inches='tight')
     else:
         plt.show()
 
@@ -381,7 +381,7 @@ def plot_unlabeled_images_random(image_list, n, title_str, ypixels, xpixels, see
         plt.gray()
         ax.get_xaxis().set_visible(False); ax.get_yaxis().set_visible(False)
     if 1:
-        pylab.savefig(filename)
+        pylab.savefig(filename, bbox_inches='tight')
     else:
         plt.show()
 
@@ -405,7 +405,7 @@ def plot_compare(x_test, decoded_imgs, filename):
         ax.get_yaxis().set_visible(False)
 
     if 1:
-        pylab.savefig(filename)
+        pylab.savefig(filename, bbox_inches='tight')
     else:
         plt.show()
 
