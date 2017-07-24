@@ -2,7 +2,9 @@
 
 Given noisy versions of the Google QuickDraw sketch image data set, we classify the object sketched inside the noisy image by denoising the image, then classifying the 'denoised' object. We select 5 object classes: pineapples, cats, fish, cups, and jackets, for the simple demonstration of how to denoise sketch images using autoencoders, then classify them using convolutional neural networks. An example result of performing our noisy classifier on 10 randomly selected noisy images:
 
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%" align="center">
+<p align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%">
+</p>
 
 The files provide here include the training code, an already trained noisy classifier model, and some example query images to apply the model to (we did not include the QuickDraw data set as it exceeded 500Mb in size and are open-sourced at https://github.com/googlecreativelab/quickdraw-dataset). 
 
@@ -11,17 +13,28 @@ Below is the algorithm we used to train our model (visualizations included), alo
 ## Algorithm: 
 
 1. We extract the training/validation/query images from provided Google QuickDraw dataset and add random Gaussian noise to them.
+
+<p align="center">
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/query.png" width="90%" align="center">
+</p>
 
 2. Using clean and noisy training/validation sketches, we train a convolutional autoencoder to learn how to denoise the images. 
+
+<p align="center">
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CAE_result.png" width="90%" align="center">
+</p>
 
 3. Using clean training/validation sketches, we train a classifier using convolutional neural networks.
+
+<p align="center">
 <img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/CNN_result.png" width="90%" align="center">
+</p>
 
 4. Having trained our denoiser and classifier, we can now classify noisy sketch images by applying to them the denoiser then the classifier.
-<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%" align="center">
 
+<p align="center">
+<img src="https://github.com/ankonzoid/Google-QuickDraw/blob/master/answer/MAIN_result.png" width="90%" align="center">
+</p>
 
 ## Usage:
 
