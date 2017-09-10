@@ -38,14 +38,14 @@ Below is the algorithm we used to train our model (visualizations included), alo
 
 ## Usage:
 
-### Usage 1 (apply model to query images)
+### To apply model to query images in `query` folder:
 To use the provided trained model (in `models`) to classify our provided noisy query images (in `query`), run the command:
 
 > python QuickDraw_noisy_classifier.py
 
-The result of this run will be saved into `answer`.
+The result of this run will be placed into the `answer` folder.
 
-### Usage 2 (freshly train model, then apply model to query images)
+### To train the model from scratch, then apply model to query images)
 You can freshly train a model using your own custom-selected Google QuickDraw data as follows:
 
 1. Download your desired sketch class `.npy` data sets from https://console.cloud.google.com/storage/browser/quickdraw_dataset/full/numpy_bitmap?pli=1 and place them all into a folder of your choice. Make sure the filename headers are of the format `full%2Fnumpy_bitmap%2F` as the code assumes this!
@@ -54,11 +54,11 @@ You can freshly train a model using your own custom-selected Google QuickDraw da
 
 3. Edit the two variables: `data_dir` and `categories` in `QuickDraw_noisy_classifier.py` accordingly. `data_dir` is the directory where you saved your new QuickDraw `.npy` data files. `categories` is the list of the object category name strings you saved.
 
-After following the above instructions, simply run:
+After following the above instructions, follow the above run command:
 
 > python QuickDraw_noisy_classifier.py
 
-This will train/save the model with your QuickDraw data set, classify new noisy query images, and place the results into `answer`.
+to train and save your new model with your QuickDraw data set, and to classify your noisy query images in the `query` folder. The results will be placed in the `answer` folder.
 
 ## Libraries required:
-* keras 
+* keras, numpy, scipy, pylab
